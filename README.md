@@ -23,7 +23,7 @@ $extras = [
 ];
 $platform = ['android', 'ios'];
 $audience = [
-    'alias' => ['15162696993']
+    'alias' => ['13888888888']
 ];
 
 $push = new JPush($appKey, $masterSecret);
