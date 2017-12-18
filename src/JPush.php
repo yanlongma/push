@@ -3,7 +3,7 @@
 namespace YanlongMa\Push;
 
 /**
- * 极光推送
+ * JPush
  *
  * @author Yanlong Ma
  */
@@ -16,16 +16,21 @@ class JPush
 
     private $pushApi = 'https://api.jpush.cn/v3/push';
 
+    // 针对 iOS 平台, true 表示推送生产环境，false 表示要推送开发环境 如果不指定则为推送生产环境
+    private $apnsProduction;
+
     /**
      * JPush constructor.
      *
      * @param $appKey
      * @param $masterSecret
+     * @param bool $apnsProduction
      */
-    public function __construct($appKey, $masterSecret)
+    public function __construct($appKey, $masterSecret, $apnsProduction = false)
     {
         $this->appKey = $appKey;
         $this->masterSecret = $masterSecret;
+        $this->apnsProduction = $apnsProduction;
     }
 
     /**
@@ -47,7 +52,13 @@ class JPush
      * @param string $alert 弹框信息
      * @param array $extras 自定义字段
      * @param array $platform 推送平台
-     * @param array $audience 推送目标  alias推送最多支持1000个,外部注意处理
+     *          默认推所有，根据自己需要选择平台 ["android", "ios", "winphone"]
+     * @param array $audience 推送目标
+     *          默认推所有，支持别名、标签、注册ID、分群、广播等
+     *          alias 推送最多支持1000个,外部注意处理
+     *          [
+     *             'alias' => ['13888888888', '13866666666'],
+     *          ]
      * @return bool
      */
     public function push($alert = 'JPush', array $extras = [], array $platform = [], array $audience = [])
@@ -61,9 +72,6 @@ class JPush
             'platform' => $platform,
             // 如果要发广播（全部设备）则直接填写"all"  { "audience" : "all" }
             // 支持别名、标签、注册ID、分群、广播等
-//            'audience' => [
-//                'alias' => ['15162696993', '17749740527'],
-//            ],
             'audience' => $audience,
             'notification' => [
                 'ios' => [
@@ -80,8 +88,7 @@ class JPush
                 ]
             ],
             'options' => [
-                // 针对 iOS 平台, True 表示推送生产环境，False 表示要推送开发环境 如果不指定则为推送生产环境
-                'apns_production' => YII_ENV == 'prod' ? true : false,
+                'apns_production' => $this->apnsProduction === true ? true : false,
             ]
         ];
         // echo json_encode($postData); exit;
@@ -108,52 +115,4 @@ class JPush
         return true;
     }
 
-    public function test()
-    {
-        $postData = [
-            // 推送到所有平台为"all" { "platform" : "all" }
-            // 指定特定推送平台 { "platform" : ["android", "ios"] }  目前支持 "android", "ios", "winphone"
-            'platform' => ['ios'],
-            // 如果要发广播（全部设备）则直接填写"all"  { "audience" : "all" }
-            // 支持别名、标签、注册ID、分群、广播等
-            'audience' => [
-                'alias' => ['15162696993'],
-            ],
-            'notification' => [
-                'ios' => [
-                    'alert' => 'Hi, JPush!',
-                    'sound' => 'default',
-                    'badge' => '+1',
-                    'extras' => [
-                        'newsid' => 11111,
-                        'newsid2' => 11111,
-                    ]
-                ],
-                'android' => [
-                    'alert' => '',
-                    'title' => '',
-                    'builder_id' => 1,
-                    'extras' => [
-                        'newsid' => 11111,
-                        'newsid2' => 11111,
-                    ]
-                ]
-            ],
-            'options' => [
-                'apns_production' => false, //  针对 iOS 平台, True 表示推送生产环境，False 表示要推送开发环境； 如果不指定则为推送生产环境
-            ]
-        ];
-
-        $options = [
-            CURLOPT_HTTPHEADER => $this->getHeader()
-        ];
-
-        $client = new Client();
-        $response = $client->request('POST', $this->pushApi, json_encode($postData), $options);
-        echo '<pre>';
-        var_dump($response->getStatusCode());
-        //var_dump($response->getTransferInfo());
-        echo($response->getBody());
-        exit;
-    }
 }
