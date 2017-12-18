@@ -1,7 +1,6 @@
 {
     "name": "yanlongma/push",
     "description": "Third party message push",
-    "type": "library",
     "authors": [
         {
             "name": "Yanlong Ma"
