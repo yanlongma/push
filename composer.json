@@ -1,0 +1,19 @@
+{
+    "name": "marko/push",
+    "description": "Third party message push",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Yanlong Ma"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
