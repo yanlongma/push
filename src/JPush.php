@@ -1,6 +1,6 @@
 <?php
 
-namespace Marko\Push;
+namespace YanlongMa\Push;
 
 /**
  * 极光推送
