@@ -10,8 +10,8 @@ $ composer require yanlongma/push
 
 ## demo
 
-```
-<?php 
+```php
+<?php
 
 $appKey = 'your-app-key';
 $masterSecret = 'your-master-secret';
