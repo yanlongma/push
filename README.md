@@ -15,6 +15,8 @@ $ composer require yanlongma/push
 ```php
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
 $appKey = 'your-app-key';
 $masterSecret = 'your-master-secret';
 
