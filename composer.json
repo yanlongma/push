@@ -11,8 +11,8 @@
         "php": ">=5.3"
     },
     "autoload": {
-        "classmap": [
-            "src/"
-        ]
+        "psr-4": {
+            "YanlongMa\\Push\\": "src/"
+        }
     }
 }
